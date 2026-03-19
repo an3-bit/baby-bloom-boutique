@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { ShoppingBag, Search, Menu, X } from "lucide-react";
+import { ShoppingBag, Search, Menu, X, User } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -17,12 +17,10 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        {/* Logo */}
         <Link to="/" className="font-display text-2xl font-bold text-foreground tracking-tight">
           tiny<span className="text-primary">bloom</span>
         </Link>
 
-        {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8">
           {links.map((l) => (
             <Link
@@ -37,10 +35,12 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <Link to="/catalog" className="p-2 rounded-full hover:bg-muted transition-colors">
             <Search className="w-5 h-5 text-foreground" />
+          </Link>
+          <Link to="/auth" className="p-2 rounded-full hover:bg-muted transition-colors">
+            <User className="w-5 h-5 text-foreground" />
           </Link>
           <Link to="/cart" className="p-2 rounded-full hover:bg-muted transition-colors relative">
             <ShoppingBag className="w-5 h-5 text-foreground" />
@@ -63,7 +63,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -83,6 +82,13 @@ export default function Navbar() {
                   {l.label}
                 </Link>
               ))}
+              <Link
+                to="/auth"
+                onClick={() => setMobileOpen(false)}
+                className="font-body text-base py-2 hover:text-primary transition-colors"
+              >
+                Sign In
+              </Link>
             </div>
           </motion.div>
         )}
