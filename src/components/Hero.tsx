@@ -1,145 +1,78 @@
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { products } from "@/data/products";
+import baby1 from "@/assets/baby1.jfif";
+import baby2 from "@/assets/baby2.jfif";
+import baby3 from "@/assets/baby3.jfif";
 
-// Main hero products (large card) and side products (smaller card)
-const mainProducts = products.filter((p) => p.badge).slice(0, 4);
-const sideProducts = products.filter((p) => !p.badge || p.badge === "Bestseller").slice(0, 4);
+const overlayGradient =
+  "from-black/70 via-black/30 to-transparent";
+const gradientHeading = "bg-gradient-to-r from-black via-black/90 to-rose-500 bg-clip-text text-transparent";
 
 export default function Hero() {
-  const [mainIdx, setMainIdx] = useState(0);
-  const [sideIdx, setSideIdx] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setMainIdx((prev) => (prev + 1) % mainProducts.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setSideIdx((prev) => (prev + 1) % sideProducts.length);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const mainProduct = mainProducts[mainIdx];
-  const sideProduct = sideProducts[sideIdx];
-
   return (
-    <section className="bg-accent/20">
-      <div className="container mx-auto px-4 py-6 md:py-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
-          {/* Main large hero card */}
-          <div className="md:col-span-2 relative rounded-2xl overflow-hidden bg-card shadow-lg group cursor-pointer min-h-[320px] md:min-h-[420px]">
-            <Link to={`/product/${mainProduct.id}`} className="block w-full h-full">
-              <AnimatePresence mode="wait">
-                <motion.img
-                  key={`main-${mainIdx}`}
-                  src={mainProduct.images[0]}
-                  alt={mainProduct.name}
-                  initial={{ opacity: 0, scale: 1.05 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.8, ease: "easeInOut" }}
-                  className="w-full h-full object-cover absolute inset-0"
-                />
-              </AnimatePresence>
-
-              {/* Overlay content */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-foreground/70 via-foreground/30 to-transparent p-6 md:p-8">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={`main-text-${mainIdx}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <span className="text-primary-foreground/70 text-sm font-body">{mainProduct.category}</span>
-                    <h2 className="font-display text-2xl md:text-3xl font-bold text-primary-foreground mt-1">
-                      {mainProduct.name}
-                    </h2>
-                    {mainProduct.badge && (
-                      <span className="inline-block mt-2 px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-body font-semibold">
-                        {mainProduct.badge}
-                      </span>
-                    )}
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-            </Link>
-
-            {/* Slide indicators */}
-            <div className="absolute bottom-3 right-4 flex gap-1.5 z-10">
-              {mainProducts.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={(e) => { e.preventDefault(); setMainIdx(i); }}
-                  className={`h-2 rounded-full transition-all duration-500 ${
-                    i === mainIdx ? "w-6 bg-primary" : "w-2 bg-primary-foreground/50"
-                  }`}
-                  aria-label={`Show slide ${i + 1}`}
-                />
-              ))}
+    <section className="bg-[#eef6f8]">
+      <div className="container mx-auto px-4 py-8 md:py-12">
+        <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr] gap-5">
+          {/* Main hero card */}
+          <article className="relative rounded-[32px] overflow-hidden shadow-[0_25px_60px_rgba(15,23,42,0.25)] min-h-[440px] md:min-h-[500px] bg-card">
+            <img
+              src={baby2}
+              alt="Baby shower towels and products"
+              className="w-full h-full object-cover absolute inset-0"
+              loading="lazy"
+            />
+            <div className={`absolute inset-0 ${overlayGradient}`}></div>
+            <div className="relative z-10 flex flex-col justify-end h-full p-8 md:p-10">
+              <span className="text-sm uppercase tracking-[0.2em] text-black/70 font-semibold">
+                Baby Shower Pack
+              </span>
+              <h1 className={`font-display text-4xl md:text-5xl font-bold leading-tight mt-3 ${gradientHeading}`}>
+                Sweet Me'
+              </h1>
+              <p className="max-w-xl text-base text-black/70 mt-4">
+                The best safe baby showering products you can find
+              </p>
+              <Link
+                to="/catalog"
+                className="inline-flex items-center justify-center mt-6 px-6 py-3 rounded-full bg-primary text-black text-sm font-semibold shadow-lg shadow-primary/40 transition hover:-translate-y-0.5"
+              >
+                Browse Products
+              </Link>
             </div>
-          </div>
+          </article>
 
-          {/* Side smaller card */}
-          <div className="relative rounded-2xl overflow-hidden bg-card shadow-lg group cursor-pointer min-h-[250px] md:min-h-[420px]">
-            <Link to={`/product/${sideProduct.id}`} className="block w-full h-full">
-              <AnimatePresence mode="wait">
-                <motion.img
-                  key={`side-${sideIdx}`}
-                  src={sideProduct.images[0]}
-                  alt={sideProduct.name}
-                  initial={{ opacity: 0, x: 30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -30 }}
-                  transition={{ duration: 0.7, ease: "easeInOut" }}
-                  className="w-full h-full object-cover absolute inset-0"
-                />
-              </AnimatePresence>
-
-              {/* Overlay content */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-foreground/70 via-foreground/30 to-transparent p-5 md:p-6">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={`side-text-${sideIdx}`}
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.4 }}
-                  >
-                    <span className="text-primary-foreground/70 text-xs font-body">{sideProduct.category}</span>
-                    <h3 className="font-display text-lg md:text-xl font-bold text-primary-foreground mt-1">
-                      {sideProduct.name}
-                    </h3>
-                    {sideProduct.badge && (
-                      <span className="inline-block mt-2 px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-body font-semibold">
-                        {sideProduct.badge}
-                      </span>
-                    )}
-                  </motion.div>
-                </AnimatePresence>
+          {/* Right stack cards */}
+          <div className="flex flex-col gap-5">
+            <article className="relative rounded-[28px] overflow-hidden shadow-[0_20px_45px_rgba(15,23,42,0.15)] min-h-[200px] md:min-h-[200px] bg-white">
+              <img
+                src={baby1}
+                alt="Baby stroller essentials"
+                className="w-full h-full object-cover absolute inset-0"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
+              <div className="relative z-10 p-6 md:p-7">
+                <span className="text-xs uppercase tracking-[0.3em] text-black/70 font-semibold">
+                  Baby Strollers
+                </span>
+                <h2 className={`font-display text-2xl font-bold mt-3 ${gradientHeading}`}>Chick me</h2>
               </div>
-            </Link>
+            </article>
 
-            {/* Slide indicators */}
-            <div className="absolute bottom-3 right-4 flex gap-1.5 z-10">
-              {sideProducts.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={(e) => { e.preventDefault(); setSideIdx(i); }}
-                  className={`h-1.5 rounded-full transition-all duration-500 ${
-                    i === sideIdx ? "w-5 bg-primary" : "w-1.5 bg-primary-foreground/50"
-                  }`}
-                  aria-label={`Show side slide ${i + 1}`}
-                />
-              ))}
-            </div>
+            <article className="relative rounded-[28px] overflow-hidden shadow-[0_20px_45px_rgba(15,23,42,0.15)] min-h-[200px] md:min-h-[220px] bg-white">
+              <img
+                src={baby3}
+                alt="Baby stroller in pastel setting"
+                className="w-full h-full object-cover absolute inset-0"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent"></div>
+              <div className="relative z-10 p-6 md:p-7">
+                <span className="text-xs uppercase tracking-[0.3em] text-black/70 font-semibold">
+                  Baby Care Products
+                </span>
+                <h2 className={`font-display text-2xl font-bold mt-3 ${gradientHeading}`}>Baby Love</h2>
+              </div>
+            </article>
           </div>
         </div>
       </div>
