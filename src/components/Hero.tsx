@@ -1,18 +1,27 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import heroBaby from "@/assets/hero-baby.jpg";
+import { motion, AnimatePresence } from "framer-motion";
+import { products } from "@/data/products";
+
+const heroProducts = products.filter((p) => p.badge).slice(0, 5);
 
 export default function Hero() {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % heroProducts.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const product = heroProducts[current];
+
   return (
-    <section className="relative overflow-hidden bg-accent/30">
-      <div className="container mx-auto px-4 py-16 md:py-24 flex flex-col md:flex-row items-center gap-8 md:gap-16">
+    <section className="relative overflow-hidden bg-accent/30 min-h-[480px] md:min-h-[520px]">
+      <div className="container mx-auto px-4 py-16 md:py-20 flex flex-col md:flex-row items-center gap-8 md:gap-16">
         {/* Text */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="flex-1 text-center md:text-left"
-        >
+        <div className="flex-1 text-center md:text-left z-10">
           <span className="badge-category mb-4 inline-block">New Collection 2026</span>
           <h1 className="text-4xl md:text-6xl font-display font-bold text-foreground leading-tight mb-4">
             Everything your <span className="text-primary">little one</span> needs
@@ -28,21 +37,53 @@ export default function Hero() {
               New Arrivals
             </Link>
           </div>
-        </motion.div>
+        </div>
 
-        {/* Image */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="flex-1 max-w-lg"
-        >
-          <img
-            src={heroBaby}
-            alt="Cute baby items flat lay with teddy bear, booties, and wooden rattle"
-            className="rounded-3xl shadow-2xl w-full object-cover"
-          />
-        </motion.div>
+        {/* Sliding hero image */}
+        <div className="flex-1 max-w-lg relative">
+          <div className="rounded-3xl overflow-hidden shadow-2xl aspect-square relative">
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={current}
+                src={product.images[0]}
+                alt={product.name}
+                initial={{ opacity: 0, x: 60 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -60 }}
+                transition={{ duration: 0.8, ease: "easeInOut" }}
+                className="w-full h-full object-cover absolute inset-0"
+              />
+            </AnimatePresence>
+            {/* Product name overlay */}
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-foreground/60 to-transparent p-6">
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={current}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="font-body text-primary-foreground font-semibold text-sm"
+                >
+                  {product.name}
+                </motion.p>
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Slide indicators */}
+          <div className="flex justify-center gap-2 mt-4">
+            {heroProducts.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrent(i)}
+                className={`h-2 rounded-full transition-all duration-500 ${
+                  i === current ? "w-8 bg-primary" : "w-2 bg-primary/30"
+                }`}
+                aria-label={`Show slide ${i + 1}`}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

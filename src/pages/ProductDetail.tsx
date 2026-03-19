@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, Star, ShoppingBag, Minus, Plus } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { products } from "@/data/products";
+import { products, formatKES } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import ProductCard from "@/components/ProductCard";
 
@@ -12,6 +12,7 @@ export default function ProductDetail() {
   const { addItem } = useCart();
   const [qty, setQty] = useState(1);
   const [selectedSize, setSelectedSize] = useState<string | undefined>(undefined);
+  const [activeImage, setActiveImage] = useState(0);
 
   if (!product) {
     return (
@@ -39,14 +40,32 @@ export default function ProductDetail() {
         </Link>
 
         <div className="grid md:grid-cols-2 gap-8 md:gap-16">
-          {/* Image */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="rounded-3xl overflow-hidden bg-card aspect-square"
-          >
-            <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
-          </motion.div>
+          {/* Images */}
+          <div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="rounded-3xl overflow-hidden bg-card aspect-square mb-4"
+            >
+              <img src={product.images[activeImage]} alt={product.name} className="w-full h-full object-cover" />
+            </motion.div>
+            {/* Thumbnails */}
+            {product.images.length > 1 && (
+              <div className="flex gap-3">
+                {product.images.map((img, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActiveImage(i)}
+                    className={`w-20 h-20 rounded-xl overflow-hidden border-2 transition-all ${
+                      i === activeImage ? "border-primary" : "border-transparent opacity-60 hover:opacity-100"
+                    }`}
+                  >
+                    <img src={img} alt={`${product.name} view ${i + 1}`} className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
           {/* Info */}
           <motion.div
@@ -73,10 +92,10 @@ export default function ProductDetail() {
             </div>
 
             <div className="flex items-baseline gap-3 mb-6">
-              <span className="font-display text-3xl font-bold text-foreground">${product.price.toFixed(2)}</span>
+              <span className="font-display text-3xl font-bold text-foreground">{formatKES(product.price)}</span>
               {product.originalPrice && (
                 <span className="text-lg text-muted-foreground line-through font-body">
-                  ${product.originalPrice.toFixed(2)}
+                  {formatKES(product.originalPrice)}
                 </span>
               )}
             </div>
