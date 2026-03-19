@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Trash2, Minus, Plus, ShoppingBag, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/context/CartContext";
+import { formatKES } from "@/data/products";
 
 export default function Cart() {
   const { items, removeItem, updateQuantity, totalPrice, totalItems } = useCart();
@@ -18,6 +19,8 @@ export default function Cart() {
       </div>
     );
   }
+
+  const shipping = totalPrice >= 5000 ? 0 : 599;
 
   return (
     <div className="container mx-auto px-4 py-8 min-h-screen">
@@ -36,14 +39,14 @@ export default function Cart() {
                 className="flex gap-4 bg-card rounded-2xl p-4"
               >
                 <Link to={`/product/${item.product.id}`} className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0">
-                  <img src={item.product.image} alt={item.product.name} className="w-full h-full object-cover" />
+                  <img src={item.product.images[0]} alt={item.product.name} className="w-full h-full object-cover" />
                 </Link>
                 <div className="flex-1 min-w-0">
                   <Link to={`/product/${item.product.id}`} className="font-body font-semibold text-foreground text-sm hover:text-primary transition-colors line-clamp-1">
                     {item.product.name}
                   </Link>
                   {item.size && <p className="text-xs text-muted-foreground font-body">Size: {item.size}</p>}
-                  <p className="font-body font-bold text-foreground mt-1">${item.product.price.toFixed(2)}</p>
+                  <p className="font-body font-bold text-foreground mt-1">{formatKES(item.product.price)}</p>
                   <div className="flex items-center justify-between mt-2">
                     <div className="flex items-center border rounded-lg">
                       <button onClick={() => updateQuantity(item.product.id, item.quantity - 1)} className="p-1.5 hover:bg-muted transition-colors rounded-l-lg">
@@ -70,26 +73,26 @@ export default function Cart() {
           <div className="space-y-3 mb-6">
             <div className="flex justify-between font-body text-sm">
               <span className="text-muted-foreground">Subtotal</span>
-              <span className="text-foreground font-medium">${totalPrice.toFixed(2)}</span>
+              <span className="text-foreground font-medium">{formatKES(totalPrice)}</span>
             </div>
             <div className="flex justify-between font-body text-sm">
               <span className="text-muted-foreground">Shipping</span>
-              <span className="text-foreground font-medium">{totalPrice >= 50 ? "Free" : "$5.99"}</span>
+              <span className="text-foreground font-medium">{shipping === 0 ? "Free" : formatKES(shipping)}</span>
             </div>
             <div className="border-t pt-3 flex justify-between font-body">
               <span className="font-semibold text-foreground">Total</span>
               <span className="font-bold text-foreground text-lg">
-                ${(totalPrice + (totalPrice >= 50 ? 0 : 5.99)).toFixed(2)}
+                {formatKES(totalPrice + shipping)}
               </span>
             </div>
           </div>
-          {totalPrice < 50 && (
+          {totalPrice < 5000 && (
             <p className="text-xs text-muted-foreground font-body mb-4 bg-accent/50 rounded-lg p-3">
-              🚚 Add ${(50 - totalPrice).toFixed(2)} more for free shipping!
+              🚚 Add {formatKES(5000 - totalPrice)} more for free shipping!
             </p>
           )}
           <button className="btn-baby w-full flex items-center justify-center gap-2">
-            Checkout <ArrowRight className="w-4 h-4" />
+            Pay with M-Pesa <ArrowRight className="w-4 h-4" />
           </button>
           <Link to="/catalog" className="block text-center text-sm text-muted-foreground hover:text-primary font-body mt-4 transition-colors">
             Continue Shopping

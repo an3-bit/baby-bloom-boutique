@@ -1,10 +1,9 @@
 import Hero from "@/components/Hero";
 import CategoryGrid from "@/components/CategoryGrid";
 import ProductCard from "@/components/ProductCard";
-import { products } from "@/data/products";
+import { products, formatKES } from "@/data/products";
 
 const Index = () => {
-  // Featured products = those with badges or highest rated
   const featured = products.filter((p) => p.badge).slice(0, 4);
   const bestsellers = [...products].sort((a, b) => b.reviews - a.reviews).slice(0, 4);
 
@@ -39,9 +38,9 @@ const Index = () => {
       <section className="bg-accent/30 py-12">
         <div className="container mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           {[
-            { icon: "🚚", title: "Free Shipping", desc: "On orders over $50" },
+            { icon: "🚚", title: "Free Shipping", desc: `On orders over ${formatKES(5000)}` },
             { icon: "🔄", title: "Easy Returns", desc: "30-day return policy" },
-            { icon: "🌿", title: "Eco Friendly", desc: "Sustainable materials" },
+            { icon: "📱", title: "Lipa na M-Pesa", desc: "Simple mobile payment" },
             { icon: "💝", title: "Gift Wrapping", desc: "Free on all orders" },
           ].map((item) => (
             <div key={item.title}>
