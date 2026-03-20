@@ -68,13 +68,13 @@ export default function Hero() {
             </AnimatePresence>
             <div className={`absolute inset-0 ${overlayGradient}`}></div>
             <div className="relative z-10 flex flex-col justify-end items-end text-right h-full p-8 md:p-10">
-              <span className="text-sm uppercase tracking-[0.2em] text-[#ffb5d5] font-semibold">
+              <span className="text-sm uppercase tracking-[0.2em] text-black font-semibold">
                 Baby Shower Pack
               </span>
               <h1 className={`font-display text-4xl md:text-5xl font-bold leading-tight mt-3 ${gradientHeading}`}>
                 Sweet Me'
               </h1>
-              <p className="max-w-xl text-base text-[#ffd8ec] mt-4">
+              <p className="max-w-xl text-base text-black mt-4">
                 The best safe baby showering products you can find
               </p>
               <Link
@@ -104,7 +104,7 @@ export default function Hero() {
               </AnimatePresence>
               <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
               <div className="relative z-10 p-6 md:p-7 flex flex-col items-start text-left">
-                <span className="text-xs uppercase tracking-[0.3em] text-[#ffb5d5] font-semibold">
+                <span className="text-xs uppercase tracking-[0.3em] text-black font-semibold">
                   Baby Strollers
                 </span>
                 <h2 className={`font-display text-2xl font-bold mt-3 ${gradientHeading}`}>Chick me</h2>
@@ -127,7 +127,7 @@ export default function Hero() {
               </AnimatePresence>
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent"></div>
               <div className="relative z-10 p-6 md:p-7 flex flex-col items-start text-left">
-                <span className="text-xs uppercase tracking-[0.3em] text-[#ffb5d5] font-semibold">
+                <span className="text-xs uppercase tracking-[0.3em] text-black font-semibold">
                   Baby Care Products
                 </span>
                 <h2 className={`font-display text-2xl font-bold mt-3 ${gradientHeading}`}>Baby Love</h2>
